@@ -37,26 +37,19 @@ app.get('/usrdb', async (req, res) => {
     try {
         const { respon } = await loads('@func/db.json'); 
 
-        let parsedRespon;
-        try {
-            parsedRespon = JSON.parse(respon);
-        } catch (e) {
-            return res.status(400).json({ status: 400, msg: 'Respon tidak valid sebagai JSON' });
-        }
-
-        if (!parsedRespon) {
+        if (!respon) {
             return res.status(400).json({ status: 400, msg: 'tetod 😹' });
         }
 
         if (usr !== "unknown") {
-            if (!parsedRespon.db.includes(usr)) {
+            if (!respon.db.includes(usr)) {
                 return res.json({ data: false });
             } else {
                 return res.json({ data: true });
             }
         }
 
-        return res.json(parsedRespon);
+        return res.json(respon);
 
     } catch (error) {
         console.error(error);
