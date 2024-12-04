@@ -14,13 +14,48 @@ app.get('/', (req, res) => {
 app.get('/load', async (req, res) => {
   const { query } = req;
   if (!query || !query.q) {
-    return res.status(400).send({ error: 'Parameter q diperlukan, misalnya ?q=@module/file.js' });
+    return res.status(400).send({ error: 'tetod 😹' });
   }
 
   const result = await loads(query.q);
   res.send(result);
 });
 
+app.get('/test', async (req, res) => {
+    res.send({
+        success: true,
+        data: {
+            active: true
+        }
+    });
+});
+
+app.get('/usrdb', async (req, res) => {
+    const { usrq } = req.query;
+    const usr = usrq ? usrq : 'unknown';
+    
+    try {
+        const { respon } = await loads('@func/db.json');
+        
+        if (!respon) {
+            return res.status(400).send({ status: 400, msg: 'tetod 😹' });
+        }
+        
+        if (usr !== "unknown") {
+        if (!respon.db.includes(usr) {
+        return res.send({ data: false })
+        } else {
+        return res.send({ data: true })
+        }
+        }
+        
+        res.send(respon);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ status: 500, msg: 'Terjadi kesalahan pada server' });
+    }
+});
+    
 const port = 3000;
 
 app.listen(port, () => {
