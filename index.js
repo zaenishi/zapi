@@ -33,28 +33,37 @@ app.get('/test', async (req, res) => {
 app.get('/usrdb', async (req, res) => {
     const { usrq } = req.query;
     const usr = usrq ? usrq : 'unknown';
-    
+
     try {
-        const { respon } = await loads('@func/db.json');
-        
-        if (!respon) {
-            return res.status(400).send({ status: 400, msg: 'tetod 😹' });
+        const { respon } = await loads('@func/db.json'); 
+
+        let parsedRespon;
+        try {
+            parsedRespon = JSON.parse(respon);
+        } catch (e) {
+            return res.status(400).json({ status: 400, msg: 'Respon tidak valid sebagai JSON' });
         }
-        
+
+        if (!parsedRespon) {
+            return res.status(400).json({ status: 400, msg: 'tetod 😹' });
+        }
+
         if (usr !== "unknown") {
-        if (!respon.db.includes(usr) {
-        return res.send({ data: false })
-        } else {
-        return res.send({ data: true })
+            if (!parsedRespon.db.includes(usr)) {
+                return res.json({ data: false });
+            } else {
+                return res.json({ data: true });
+            }
         }
-        }
-        
-        res.send(respon);
+
+        return res.json(parsedRespon);
+
     } catch (error) {
         console.error(error);
-        return res.status(500).send({ status: 500, msg: 'Terjadi kesalahan pada server' });
+        return res.status(500).json({ status: 500, msg: 'Terjadi kesalahan pada server' });
     }
 });
+
     
 const port = 3000;
 
